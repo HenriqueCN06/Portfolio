@@ -194,7 +194,7 @@ function __OriginkitBase_VariableFontCursorProximity(props) {
 
     const words = label ? label.split(" ") : []
 
-    letterRefs.current = []
+    // letterRefs.current = [] // removed to prevent missing refs on re-render
     let letterIndex = 0
 
     return (
@@ -230,7 +230,7 @@ function __OriginkitBase_VariableFontCursorProximity(props) {
                                             <motion.span
                                                 key={li}
                                                 ref={(el) => {
-                                                    letterRefs.current[idx] = el
+                                                    if (el) letterRefs.current[idx] = el
                                                 }}
                                                 style={{
                                                     display: "inline-block",

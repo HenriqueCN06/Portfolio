@@ -1,7 +1,44 @@
-import { motion, useAnimate, stagger } from 'framer-motion';
+import { motion, useAnimate, stagger, AnimatePresence } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 import { useMemo, useRef, useState, useEffect } from 'react';
 import RibbonGlow from './RibbonGlow';
+import LiquidGlassButton from './LiquidGlassButton';
+
+// --- Banco de Dados dos Projetos ---
+const PROJECTS_DATA = [
+  {
+    id: 'stockly',
+    title: 'Stockly',
+    shortDescription: 'Plataforma SaaS Multi-Tenant de Gestão de Estoque. Aplicativo mobile construído com React Native, integrando câmera para leitura de SKUs e banco de dados via Supabase.',
+    details: 'O Stockly foi idealizado para resolver o caos logístico de pequenas e médias empresas, modernizando o controle de inventário de ponta a ponta. Trata-se de um aplicativo móvel cross-platform construído em React Native, projetado como uma verdadeira plataforma SaaS (Software as a Service).\n\nO grande triunfo técnico deste projeto é a sua arquitetura Multi-Tenant (Multilocatário) estruturada no backend com Supabase (PostgreSQL). Através da implementação estrita de Row Level Security (RLS) e validações JWT, o banco de dados garante que múltiplas lojas gerenciem seus estoques, equipes e históricos de forma absolutamente isolada — assegurando integridade e privacidade total dos dados.\n\nNa camada de front-end, a performance é garantida pelo Zustand orquestrando o estado global da aplicação. A interface entrega dashboards com gráficos em tempo real e se comunica diretamente com o hardware nativo do smartphone, utilizando a câmera para o escaneamento ultrarrápido de códigos de barras (SKUs), facilitando entradas e saídas no armazém.\n\nToda a lógica de negócios foi construída para escala: desde o registro imutável de fluxo de caixa e inventário, até disparos automatizados de notificações para alertar gestores sobre estoques baixos. É a prova prática de forte domínio na integração de Front-end Mobile, Backend as a Service e lógicas de negócios complexas.',
+    tags: ['React Native', 'Supabase', 'Zustand'],
+    modalTags: ['React Native', 'Supabase', 'Zustand', 'Multi-tenant', 'RLS', 'Mobile SaaS'],
+    link: 'https://github.com/HenriqueCN06/Projeto-Stockly'
+  },
+  {
+    id: 'pokeheaven',
+    title: 'PokeHeaven',
+    shortDescription: 'Servidor MMORPG de alta volumetria. Modificação profunda no core (C++) para protocolos de rede customizados e módulos de UI/UX modernos.',
+    details: 'O PokeHeaven é um desafio de engenharia focado em alta volumetria de jogadores simultâneos. Realizei modificações profundas no código-fonte (core) do motor do jogo, programado em C++, desenvolvendo e otimizando protocolos de rede para suportar a intensa carga de dados sem latência perceptível. Além da arquitetura de backend, criei interfaces de usuário ricas (UI/UX) diretamente integradas ao cliente usando OpenGL, e desenvolvi scripts complexos em Lua para governar as regras de negócios, mecânicas e eventos do mundo virtual.',
+    tags: ['C++', 'Lua', 'OpenGL'],
+    modalTags: ['C++', 'Lua', 'OpenGL', 'Networking', 'MMORPG Core'],
+    link: null
+  },
+  {
+    id: 'piw-manager',
+    title: 'PIW Manager',
+    shortDescription: 'Ferramenta Desktop multi-contas (Multi-boxing) para o Poke Idle World. Construída com Electron, utiliza injeção avançada de DOM em tempo real para orquestrar sessões paralelas e injetar mecânicas de Qualidade de Vida (QoL).',
+    details: 'O PIW Manager nasceu da necessidade de aplicar conceitos de Qualidade de Vida (UX/QoL) e automação especificamente para o Poke Idle World, um web game cuja interface carecia de ferramentas nativas de usabilidade avançada. O grande desafio técnico era gerenciar múltiplas contas simultaneamente e modificar o comportamento da interface do jogo sem possuir acesso a uma API oficial.\n\nA solução foi orquestrada construindo um container Desktop robusto utilizando Electron. Por meio do uso avançado de tags <webview>, instanciei janelas de navegador completamente isoladas, permitindo que múltiplas contas operem em paralelo sem conflito de sessão (arquitetura Multi-boxing e Multi-tenant local).\n\nO núcleo tecnológico do projeto reside na Manipulação Extensiva de DOM (DOM Injection). Mapeei toda a estrutura HTML do Poke Idle World e desenvolvi uma suíte de módulos em JavaScript puro injetados em tempo real na página do cliente via webview-preload.js.\n\nMódulos como iv-manager.js e pokedex-filter.js interceptam atributos ocultos no código-fonte do jogo e re-renderizam painéis próprios superpostos, criando sistemas de busca complexos que não existem nativamente. Além disso, a Comunicação Inter-Processos (IPC) permite que um painel mestre envie comandos a todas as abas simultaneamente, atestando forte domínio em Engenharia Reversa de Front-end e arquitetura JavaScript Vanilla.',
+    tags: ['Electron', 'JavaScript', 'DOM'],
+    modalTags: ['Electron', 'JavaScript Vanilla', 'DOM Injection', 'IPC', 'Webviews', 'Engenharia Reversa'],
+    mediaPlacement: {
+      1: '/videos/piwmanager sample 1.mp4', // Renderiza após o 2º parágrafo (índice 1)
+      3: '/videos/piwmanager sample 2.mp4'  // Renderiza após o 4º/último parágrafo (índice 3)
+    },
+    link: 'https://github.com/HenriqueCN06/PIW-Multi-Account-Manager'
+  }
+];
+// -----------------------------------
 
 // --- OriginKit Component ---
 const INTER_VARIABLE_FONT_FACE = `
@@ -166,8 +203,49 @@ function SpotlightCard({
 }
 
 export default function App() {
+  const [selectedProject, setSelectedProject] = useState(null);
+
+  // Impede o scroll da página enquanto o modal estiver aberto (sem layout shift)
+  useEffect(() => {
+    // Garante que o fundo da página (atrás do App) seja escuro para não vazar a cor branca padrão do navegador
+    document.body.classList.add('bg-zinc-950');
+    let timeoutId;
+    
+    if (selectedProject) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      // Aguarda a animação de saída do modal terminar (~400ms) antes de devolver a barra de rolagem.
+      // Isso evita que o modal seja "empurrado" para o lado durante o fade-out.
+      timeoutId = setTimeout(() => {
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+      }, 400);
+    }
+    
+    return () => { 
+      if (timeoutId) clearTimeout(timeoutId);
+    }
+  }, [selectedProject]);
+
   return (
     <div className="relative min-h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-emerald-500/30">
+      <style>{`
+        ::-webkit-scrollbar {
+          width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: #3f3f46; /* zinc-700 */
+          border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: #52525b; /* zinc-600 */
+        }
+      `}</style>
       
       {/* Background Interativo WebGL */}
       <div className="fixed inset-0 z-0 pointer-events-auto opacity-35">
@@ -255,47 +333,45 @@ export default function App() {
         </motion.h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <SpotlightCard className="rounded-2xl h-full" delay={0}>
-            <h4 className="text-2xl font-bold text-white mb-3">Stockly</h4>
-            <p className="text-zinc-400 text-sm mb-6 flex-grow leading-relaxed">
-              Plataforma SaaS Multi-Tenant de Gestão de Estoque. Aplicativo mobile construído com React Native, integrando câmera para leitura de SKUs e banco de dados via Supabase.
-            </p>
-            <div className="flex flex-wrap gap-2 mb-8">
-              {['React Native', 'Supabase', 'Zustand'].map(tag => (
-                <span key={tag} className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">{tag}</span>
-              ))}
-            </div>
-            <a href="https://github.com/HenriqueCN06/Projeto-Stockly" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-emerald-400 text-sm font-semibold hover:text-emerald-300 transition-colors mt-auto w-max">
-              Ver Repositório <FaGithub size={16} />
-            </a>
-          </SpotlightCard>
-          
-          <SpotlightCard className="rounded-2xl h-full" delay={0.1}>
-            <h4 className="text-2xl font-bold text-white mb-3">PokeHeaven</h4>
-            <p className="text-zinc-400 text-sm mb-6 flex-grow leading-relaxed">
-              Servidor MMORPG de alta volumetria. Modificação profunda no core (C++) para protocolos de rede customizados e módulos de UI/UX modernos.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {['C++', 'Lua', 'OpenGL'].map(tag => (
-                <span key={tag} className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">{tag}</span>
-              ))}
-            </div>
-          </SpotlightCard>
-
-          <SpotlightCard className="rounded-2xl h-full" delay={0.2}>
-            <h4 className="text-2xl font-bold text-white mb-3">PIW Manager</h4>
-            <p className="text-zinc-400 text-sm mb-6 flex-grow leading-relaxed">
-              Gerenciador Desktop multitarefa. Aplicação construída com Electron, focada em manipulação de DOM e scripts para melhorias de UX no jogo.
-            </p>
-            <div className="flex flex-wrap gap-2 mb-8">
-              {['Electron', 'JavaScript', 'DOM'].map(tag => (
-                <span key={tag} className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">{tag}</span>
-              ))}
-            </div>
-            <a href="https://github.com/HenriqueCN06/PIW-Multi-Account-Manager" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-emerald-400 text-sm font-semibold hover:text-emerald-300 transition-colors mt-auto w-max">
-              Ver Repositório <FaGithub size={16} />
-            </a>
-          </SpotlightCard>
+          {PROJECTS_DATA.map((proj, index) => (
+            <SpotlightCard key={proj.id} className="rounded-2xl h-full" delay={index * 0.1}>
+              <div className="flex flex-col h-full">
+                <h4 className="text-2xl font-bold text-white mb-3">{proj.title}</h4>
+                <p className="text-zinc-400 text-sm mb-6 flex-grow leading-relaxed">
+                  {proj.shortDescription}
+                </p>
+                
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {proj.tags.map(tag => (
+                    <span key={tag} className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                
+                {/* Footer do Card com Botões Lado a Lado */}
+                <div className="flex items-center gap-3 mt-auto">
+                  <div className="flex-1" onClick={() => setSelectedProject(proj)}>
+                    <LiquidGlassButton 
+                      label="Saiba Mais"
+                      style={{ width: '100%', height: '100%' }}
+                    />
+                  </div>
+                  {proj.link && (
+                    <a 
+                      href={proj.link} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="flex items-center justify-center bg-zinc-900 border border-zinc-700 hover:border-emerald-500/50 text-emerald-400 w-10 h-10 rounded-lg transition-colors"
+                      title="Ver Repositório"
+                    >
+                      <FaGithub size={18} />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </SpotlightCard>
+          ))}
         </div>
       </section>
 
@@ -389,6 +465,105 @@ export default function App() {
           </motion.div>
         </div>
       </footer>
+
+      {/* MODAL DE PROJETO */}
+      <AnimatePresence>
+        {selectedProject && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+            {/* Fundo Escuro com Blur (Estendido para fora da tela para evitar a linha brilhante de borda do CSS blur) */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedProject(null)}
+              className="absolute -inset-4 bg-black/60 backdrop-blur-md cursor-pointer"
+            />
+
+            {/* Caixa do Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-4xl bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden z-10 flex flex-col max-h-[90vh]"
+            >
+              {/* Cabeçalho do Modal */}
+              <div className="flex justify-between items-center p-6 md:p-8 border-b border-zinc-800/50 bg-zinc-900/50">
+                <h3 className="text-2xl md:text-3xl font-bold text-white">{selectedProject.title}</h3>
+                <button 
+                  onClick={() => setSelectedProject(null)}
+                  className="text-zinc-400 hover:text-white bg-zinc-800/50 hover:bg-zinc-700 p-2 rounded-full transition-colors cursor-pointer"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+
+              {/* Corpo do Modal */}
+              <div className="p-6 md:p-8 overflow-y-auto custom-scrollbar">
+                
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {(selectedProject.modalTags || selectedProject.tags).map(tag => (
+                    <span key={tag} className="text-xs font-semibold px-3 py-1 bg-zinc-800 border border-zinc-700/50 text-emerald-400 rounded-md">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="text-zinc-300 leading-relaxed text-lg space-y-6">
+                  {selectedProject.details.split('\n\n').map((paragraph, idx) => (
+                    <div key={idx} className="space-y-6">
+                      <p>{paragraph}</p>
+                      
+                      {/* Renderiza mídia se existir configurada para este índice */}
+                      {selectedProject.mediaPlacement && selectedProject.mediaPlacement[idx] && (
+                        <div className="group relative">
+                          <video 
+                            src={selectedProject.mediaPlacement[idx]}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            title="Clique para tela cheia"
+                            onClick={(e) => {
+                              const video = e.target;
+                              if (video.requestFullscreen) {
+                                video.requestFullscreen();
+                              } else if (video.webkitRequestFullscreen) {
+                                video.webkitRequestFullscreen();
+                              }
+                            }}
+                            className="w-full rounded-xl border border-zinc-800 shadow-lg object-cover cursor-pointer group-hover:border-emerald-500/50 transition-colors"
+                          />
+                          <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none flex items-center gap-2 border border-white/10">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                            Ampliar
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Rodapé do Modal */}
+              <div className="p-6 md:p-8 bg-zinc-900/50 border-t border-zinc-800/50 flex flex-wrap justify-end gap-4 mt-auto">
+                {selectedProject.link && (
+                  <a 
+                    href={selectedProject.link} 
+                    target="_blank" 
+                    rel="noreferrer" 
+                    className="flex items-center gap-2 px-6 py-2.5 bg-emerald-500 text-zinc-950 font-bold rounded-xl hover:bg-emerald-400 transition-colors"
+                  >
+                    Ver Repositório <FaGithub size={18} />
+                  </a>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       </div>
     </div>

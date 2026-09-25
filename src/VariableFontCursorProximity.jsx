@@ -206,7 +206,6 @@ function __OriginkitBase_VariableFontCursorProximity(props) {
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
-                cursor: isStatic ? undefined : "pointer",
                 ...style,
             }}
         >

@@ -298,14 +298,14 @@ export default function App() {
           </motion.h2>
           
           {/* Título Principal */}
-          <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl font-bold mb-8 tracking-tight text-white leading-tight">
+          <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl font-bold mb-8 tracking-tight text-white leading-tight cursor-default">
             Criando <VariableFontHoverByLetter label="interfaces modernas" className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500" /> <br className="hidden md:block" />
             e soluções de software <VariableFontCursorProximity label="escaláveis." className="text-emerald-400" />
           </motion.h1>
           
           {/* Breve Resumo */}
           <motion.p variants={fadeUp} className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
-            Olá, eu sou o Henrique Cucco Nunes. Desenvolvedor com sólida base prática em arquitetura de banco de dados, sistemas complexos, e cria├ºão de interfaces modernas e interativas para plataformas web, mobile e desktop.
+            Olá, eu sou o Henrique Cucco Nunes. Desenvolvedor com sólida base prática em arquitetura de banco de dados, sistemas complexos, e criação de interfaces modernas e interativas para plataformas web, mobile e desktop.
           </motion.p>
           
           {/* Call to Actions (Bot├Áes) e Redes */}

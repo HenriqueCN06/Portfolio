@@ -1,6 +1,6 @@
 import { motion, useAnimate, stagger } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
-import { useMemo } from 'react';
+import { useMemo, useRef, useState, useEffect } from 'react';
 import RibbonGlow from './RibbonGlow';
 
 // --- OriginKit Component ---
@@ -107,6 +107,64 @@ const fadeUp = {
   }
 };
 
+// Componente Genérico de Card com Spotlight Reutilizável
+function SpotlightCard({ 
+  children, 
+  className = "", 
+  contentClassName = "w-full h-full flex flex-col p-8",
+  delay = 0,
+  animateHover = true,
+  activeBorderOnHover = true
+}) {
+  const cardRef = useRef(null);
+  const [mousePosition, setMousePosition] = useState({ x: -1000, y: -1000 });
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      setMousePosition({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  return (
+    <motion.div 
+      ref={cardRef}
+      whileHover={animateHover ? { y: -5 } : {}}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay }}
+      className={`relative group bg-zinc-900/60 border border-zinc-800 transition-colors duration-300 backdrop-blur-sm overflow-hidden ${activeBorderOnHover ? 'hover:border-emerald-500/50' : ''} ${className}`}
+    >
+      {/* Efeito de Spotlight que segue o mouse */}
+      <div 
+        className="pointer-events-none absolute -inset-px transition-opacity duration-300"
+        style={{
+          background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(16, 185, 129, 0.12), transparent 40%)`
+        }}
+      />
+      {/* Borda que brilha ao redor do mouse */}
+      <div 
+        className={`pointer-events-none absolute inset-0 rounded-[inherit] border border-emerald-500/50 transition-opacity duration-300 ${activeBorderOnHover ? 'group-hover:opacity-0' : ''}`}
+        style={{
+          maskImage: `radial-gradient(300px circle at ${mousePosition.x}px ${mousePosition.y}px, black, transparent)`,
+          WebkitMaskImage: `radial-gradient(300px circle at ${mousePosition.x}px ${mousePosition.y}px, black, transparent)`
+        }}
+      />
+      <div className={`relative z-10 ${contentClassName}`}>
+        {children}
+      </div>
+    </motion.div>
+  );
+}
+
 export default function App() {
   return (
     <div className="relative min-h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-emerald-500/30">
@@ -197,84 +255,58 @@ export default function App() {
         </motion.h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Card Stockly */}
-          <motion.div 
-            whileHover={{ y: -5 }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="bg-zinc-900/60 border border-zinc-800 p-8 rounded-2xl flex flex-col backdrop-blur-sm hover:border-emerald-500/50 transition-all duration-300"
-          >
+          <SpotlightCard className="rounded-2xl h-full" delay={0}>
             <h4 className="text-2xl font-bold text-white mb-3">Stockly</h4>
             <p className="text-zinc-400 text-sm mb-6 flex-grow leading-relaxed">
               Plataforma SaaS Multi-Tenant de Gestão de Estoque. Aplicativo mobile construído com React Native, integrando câmera para leitura de SKUs e banco de dados via Supabase.
             </p>
             <div className="flex flex-wrap gap-2 mb-8">
-              <span className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">React Native</span>
-              <span className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">Supabase</span>
-              <span className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">Zustand</span>
+              {['React Native', 'Supabase', 'Zustand'].map(tag => (
+                <span key={tag} className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">{tag}</span>
+              ))}
             </div>
-            <a href="https://github.com/HenriqueCN06/Projeto-Stockly-main" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-emerald-400 text-sm font-semibold hover:text-emerald-300 transition-colors mt-auto w-max">
+            <a href="https://github.com/HenriqueCN06/Projeto-Stockly" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-emerald-400 text-sm font-semibold hover:text-emerald-300 transition-colors mt-auto w-max">
               Ver Repositório <FaGithub size={16} />
             </a>
-          </motion.div>
-
-          {/* Card PokeHeaven */}
-          <motion.div 
-            whileHover={{ y: -5 }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="bg-zinc-900/60 border border-zinc-800 p-8 rounded-2xl flex flex-col backdrop-blur-sm hover:border-emerald-500/50 transition-all duration-300"
-          >
+          </SpotlightCard>
+          
+          <SpotlightCard className="rounded-2xl h-full" delay={0.1}>
             <h4 className="text-2xl font-bold text-white mb-3">PokeHeaven</h4>
             <p className="text-zinc-400 text-sm mb-6 flex-grow leading-relaxed">
               Servidor MMORPG de alta volumetria. Modificação profunda no core (C++) para protocolos de rede customizados e módulos de UI/UX modernos.
             </p>
-            <div className="flex flex-wrap gap-2 mb-8">
-              <span className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">C++</span>
-              <span className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">Lua</span>
-              <span className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">OpenGL</span>
+            <div className="flex flex-wrap gap-2">
+              {['C++', 'Lua', 'OpenGL'].map(tag => (
+                <span key={tag} className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">{tag}</span>
+              ))}
             </div>
-            <a href="https://github.com/HenriqueCN06/pokeheaven-main" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-emerald-400 text-sm font-semibold hover:text-emerald-300 transition-colors mt-auto w-max">
-              Ver Repositório <FaGithub size={16} />
-            </a>
-          </motion.div>
+          </SpotlightCard>
 
-          {/* Card PIW */}
-          <motion.div 
-            whileHover={{ y: -5 }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="bg-zinc-900/60 border border-zinc-800 p-8 rounded-2xl flex flex-col backdrop-blur-sm hover:border-emerald-500/50 transition-all duration-300"
-          >
+          <SpotlightCard className="rounded-2xl h-full" delay={0.2}>
             <h4 className="text-2xl font-bold text-white mb-3">PIW Manager</h4>
             <p className="text-zinc-400 text-sm mb-6 flex-grow leading-relaxed">
               Gerenciador Desktop multitarefa. Aplicação construída com Electron, focada em manipulação de DOM e scripts para melhorias de UX no jogo.
             </p>
             <div className="flex flex-wrap gap-2 mb-8">
-              <span className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">Electron</span>
-              <span className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">JavaScript</span>
-              <span className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">DOM</span>
+              {['Electron', 'JavaScript', 'DOM'].map(tag => (
+                <span key={tag} className="text-xs font-semibold px-3 py-1 bg-zinc-800 text-zinc-300 rounded-md">{tag}</span>
+              ))}
             </div>
             <a href="https://github.com/HenriqueCN06/PIW-Multi-Account-Manager" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-emerald-400 text-sm font-semibold hover:text-emerald-300 transition-colors mt-auto w-max">
               Ver Repositório <FaGithub size={16} />
             </a>
-          </motion.div>
+          </SpotlightCard>
         </div>
       </section>
 
       {/* Sessão Sobre */}
       <section id="sobre" className="max-w-6xl mx-auto px-6 py-20 mb-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="bg-zinc-900/50 border border-zinc-800/50 p-8 md:p-12 rounded-3xl backdrop-blur-md flex flex-col md:flex-row gap-12 items-center"
+        <SpotlightCard 
+          delay={0} 
+          className="rounded-3xl"
+          contentClassName="p-8 md:p-12 flex flex-col md:flex-row gap-12 items-center"
+          animateHover={false}
+          activeBorderOnHover={false}
         >
           <div className="flex-1 space-y-6">
             <h3 className="text-3xl font-bold text-white tracking-tight">
@@ -305,7 +337,7 @@ export default function App() {
               ))}
             </div>
           </div>
-        </motion.div>
+        </SpotlightCard>
       </section>
 
       {/* Sessão de Contato & Footer */}

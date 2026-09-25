@@ -9,19 +9,27 @@ const PROJECTS_DATA = [
   {
     id: 'stockly',
     title: 'Stockly',
-    shortDescription: 'Plataforma SaaS Multi-Tenant de Gestão de Estoque. Aplicativo mobile construído com React Native, integrando câmera para leitura de SKUs e banco de dados via Supabase.',
-    details: 'O Stockly foi idealizado para resolver o caos logístico de pequenas e médias empresas, modernizando o controle de inventário de ponta a ponta. Trata-se de um aplicativo móvel cross-platform construído em React Native, projetado como uma verdadeira plataforma SaaS (Software as a Service).\n\nO grande triunfo técnico deste projeto é a sua arquitetura Multi-Tenant (Multilocatário) estruturada no backend com Supabase (PostgreSQL). Através da implementação estrita de Row Level Security (RLS) e validações JWT, o banco de dados garante que múltiplas lojas gerenciem seus estoques, equipes e históricos de forma absolutamente isolada — assegurando integridade e privacidade total dos dados.\n\nNa camada de front-end, a performance é garantida pelo Zustand orquestrando o estado global da aplicação. A interface entrega dashboards com gráficos em tempo real e se comunica diretamente com o hardware nativo do smartphone, utilizando a câmera para o escaneamento ultrarrápido de códigos de barras (SKUs), facilitando entradas e saídas no armazém.\n\nToda a lógica de negócios foi construída para escala: desde o registro imutável de fluxo de caixa e inventário, até disparos automatizados de notificações para alertar gestores sobre estoques baixos. É a prova prática de forte domínio na integração de Front-end Mobile, Backend as a Service e lógicas de negócios complexas.',
+    shortDescription: 'Plataforma SaaS Multi-Tenant para gestão de negócios. Desenvolvida em React Native, combina integração nativa de hardware (câmera) com um poderoso módulo de Inteligência Financeira (BI) processado em tempo real via Supabase.',
+    details: 'O Stockly foi idealizado para resolver o caos logístico de pequenas e médias empresas, modernizando o controle de inventário de ponta a ponta. Trata-se de um aplicativo móvel cross-platform construído em React Native, projetado como uma verdadeira plataforma SaaS (Software as a Service).\n\nO grande triunfo técnico deste projeto é a sua arquitetura Multi-Tenant (Multilocatário) estruturada no backend com Supabase (PostgreSQL). Através da implementação estrita de Row Level Security (RLS) e validações JWT, o banco de dados garante que múltiplas lojas gerenciem seus estoques, equipes e históricos de forma absolutamente isolada — assegurando integridade e privacidade total dos dados.\n\nNa camada de front-end, a performance é garantida pelo Zustand orquestrando o estado global da aplicação. A interface se comunica diretamente com o hardware nativo do smartphone, utilizando a câmera para o escaneamento ultrarrápido de códigos de barras (SKUs), facilitando entradas e saídas no armazém.\n\nUm dos maiores destaques de engenharia é o Módulo de Inteligência Financeira (Dashboard BI). Desenvolvi algoritmos que processam o histórico de movimentações em tempo real para calcular métricas de negócio cruciais — como Receita, Lucro Líquido, Ticket Médio e identificação automatizada de picos de venda. Esses dados alimentam gráficos dinâmicos e tooltips interativos nativos no celular, traduzindo o banco relacional em insights estratégicos para tomada de decisão.\n\nToda a lógica de negócios foi construída para escala: desde o registro imutável de fluxo de caixa, até disparos automatizados de notificações para alertar gestores sobre estoques baixos. É a prova prática de forte domínio na integração de Front-end Mobile, Backend as a Service e lógicas de negócios complexas.',
     tags: ['React Native', 'Supabase', 'Zustand'],
-    modalTags: ['React Native', 'Supabase', 'Zustand', 'Multi-tenant', 'RLS', 'Mobile SaaS'],
+    modalTags: ['React Native', 'Expo', 'Supabase (PostgreSQL)', 'Zustand', 'Multi-tenant', 'RLS', 'Segurança de Acesso', 'Mobile SaaS', 'Integração de Hardware Nativo', 'Data Visualization'],
+    mediaPlacement: {
+      2: '/videos/stockly sample 1.mp4',
+      3: '/videos/stockly sample 2.mp4'
+    },
     link: 'https://github.com/HenriqueCN06/Projeto-Stockly'
   },
   {
     id: 'pokeheaven',
     title: 'PokeHeaven',
-    shortDescription: 'Servidor MMORPG de alta volumetria. Modificação profunda no core (C++) para protocolos de rede customizados e módulos de UI/UX modernos.',
-    details: 'O PokeHeaven é um desafio de engenharia focado em alta volumetria de jogadores simultâneos. Realizei modificações profundas no código-fonte (core) do motor do jogo, programado em C++, desenvolvendo e otimizando protocolos de rede para suportar a intensa carga de dados sem latência perceptível. Além da arquitetura de backend, criei interfaces de usuário ricas (UI/UX) diretamente integradas ao cliente usando OpenGL, e desenvolvi scripts complexos em Lua para governar as regras de negócios, mecânicas e eventos do mundo virtual.',
-    tags: ['C++', 'Lua', 'OpenGL'],
-    modalTags: ['C++', 'Lua', 'OpenGL', 'Networking', 'MMORPG Core'],
+    shortDescription: 'Servidor MMORPG Full-stack de alta complexidade. Envolve engenharia profunda na engine em C++, algoritmos matemáticos de balanceamento, migração para banco relacional MySQL e uma interface autoral projetada em Lua/OpenGL.',
+    details: 'O PokeHeaven é o projeto mais desafiador do meu portfólio, exigindo domínio em engenharia de software de ponta a ponta: desde o motor do jogo e lógicas em C++, até banco de dados e UI/UX. Trata-se de um MMORPG (servidor customizado de Pokétibia) onde reescrevi sistemas fundamentais e redesenhei o Client do absoluto zero.\n\nPara garantir uma infraestrutura escalável, migrei o banco de dados original — que utilizava uma estrutura defasada em SQLite de 2012 — para um banco relacional MySQL moderno, permitindo que o projeto operasse em produção hospedado ativamente em uma VPS. Já na etapa de engenharia e desenvolvimento local, estruturei ambientes de compilação específicos e complexos (Dev-C++ para construir a source do servidor e Visual Studio Community para o Client), garantindo um pipeline robusto para as modificações na engine.\n\nNa base do motor do jogo (Engine em C++), desenvolvi sistemas de altíssima complexidade matemática e estrutural, sendo alguns deles:\n\n• Algoritmo de Balanceamento Automático: Criei do zero um sistema dinâmico que calcula o dano total de um Pokémon com base em sua tier de uso. O algoritmo distribui matematicamente esse "orçamento de dano" pelos ataques considerando o poder base e a quantidade de hits, aplicando variações baseadas em status (defensivos recebem e causam menos dano; ofensivos agem como glass cannons).\n• Matriz de Efetividades Elemental: Refiz toda a arquitetura de combate diretamente na source (combat.cpp e monsters.cpp), resolvendo cálculos de fraquezas e resistências que estavam corrompidos no projeto base.\n\nNa camada de Front-end, substituí a interface padrão por uma experiência visual (UI) 100% autoral em Lua e OpenGL. O maior expoente dessa mescla Full-stack é a Nova Pokédex: desenhei uma interface fluida para exibir informações complexas (movimentos, shinies, megas e regionais), amarrada a um sistema de backend que rastreia em tempo real, e salva no MySQL, o número exato de Pokémons vistos e capturados pelo jogador.\n\nÉ um projeto que atesta habilidades avançadas em refatoração de código legado, matemática orientada a game design, modelagem de banco de dados e infraestrutura.',
+    tags: ['C++', 'Lua', 'MySQL'],
+    modalTags: ['C++', 'Lua', 'MySQL', 'Game Engine', 'Pipeline de Compilação', 'Game Design Math', 'Arquitetura de Redes', 'DevOps / VPS', 'UI / UX', 'OpenGL'],
+    mediaPlacement: {
+      3: '/videos/pokeheaven sample 1.mp4',
+      4: '/videos/pokeheaven sample 2.mp4'
+    },
     link: null
   },
   {
@@ -32,12 +40,14 @@ const PROJECTS_DATA = [
     tags: ['Electron', 'JavaScript', 'DOM'],
     modalTags: ['Electron', 'JavaScript Vanilla', 'DOM Injection', 'IPC', 'Webviews', 'Engenharia Reversa'],
     mediaPlacement: {
-      1: '/videos/piwmanager sample 1.mp4', // Renderiza após o 2º parágrafo (índice 1)
-      3: '/videos/piwmanager sample 2.mp4'  // Renderiza após o 4º/último parágrafo (índice 3)
+      1: '/videos/piwmanager sample 1.mp4',
+      3: '/videos/piwmanager sample 2.mp4'
     },
-    link: 'https://github.com/HenriqueCN06/PIW-Multi-Account-Manager'
+    link: 'https://github.com/HenriqueCN06/PIW-QOL'
   }
 ];
+
+
 // -----------------------------------
 
 // --- OriginKit Component ---
@@ -144,7 +154,7 @@ const fadeUp = {
   }
 };
 
-// Componente Genérico de Card com Spotlight Reutilizável
+// Componente Genérico de Card com Spotlight Reutiliz├ível
 function SpotlightCard({ 
   children, 
   className = "", 
@@ -205,9 +215,9 @@ function SpotlightCard({
 export default function App() {
   const [selectedProject, setSelectedProject] = useState(null);
 
-  // Impede o scroll da página enquanto o modal estiver aberto (sem layout shift)
+  // Impede o scroll da p├ígina enquanto o modal estiver aberto (sem layout shift)
   useEffect(() => {
-    // Garante que o fundo da página (atrás do App) seja escuro para não vazar a cor branca padrão do navegador
+    // Garante que o fundo da p├ígina (atr├ís do App) seja escuro para não vazar a cor branca padrão do navegador
     document.body.classList.add('bg-zinc-950');
     let timeoutId;
     
@@ -216,7 +226,7 @@ export default function App() {
       document.body.style.overflow = 'hidden';
       document.body.style.paddingRight = `${scrollbarWidth}px`;
     } else {
-      // Aguarda a animação de saída do modal terminar (~400ms) antes de devolver a barra de rolagem.
+      // Aguarda a anima├ºão de saída do modal terminar (~400ms) antes de devolver a barra de rolagem.
       // Isso evita que o modal seja "empurrado" para o lado durante o fade-out.
       timeoutId = setTimeout(() => {
         document.body.style.overflow = '';
@@ -273,7 +283,7 @@ export default function App() {
         </div>
       </nav>
 
-      {/* Hero Section (Apresentação) */}
+      {/* Hero Section (Apresenta├ºão) */}
       <main className="flex flex-col items-center justify-center min-h-[85vh] px-6 text-center max-w-4xl mx-auto">
         <motion.div
           variants={staggerContainer}
@@ -294,10 +304,10 @@ export default function App() {
           
           {/* Breve Resumo */}
           <motion.p variants={fadeUp} className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
-            Olá, eu sou o Henrique Cucco Nunes. Desenvolvedor com sólida base prática em arquitetura de banco de dados, sistemas complexos, e criação de interfaces modernas e interativas para plataformas web, mobile e desktop.
+            Olá, eu sou o Henrique Cucco Nunes. Desenvolvedor com sólida base prática em arquitetura de banco de dados, sistemas complexos, e cria├ºão de interfaces modernas e interativas para plataformas web, mobile e desktop.
           </motion.p>
           
-          {/* Call to Actions (Botões) e Redes */}
+          {/* Call to Actions (Bot├Áes) e Redes */}
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <a 
               href="#projetos" 
@@ -349,7 +359,7 @@ export default function App() {
                   ))}
                 </div>
                 
-                {/* Footer do Card com Botões Lado a Lado */}
+                {/* Footer do Card com Bot├Áes Lado a Lado */}
                 <div className="flex items-center gap-3 mt-auto">
                   <div className="flex-1" onClick={() => setSelectedProject(proj)}>
                     <LiquidGlassButton 
@@ -395,7 +405,7 @@ export default function App() {
               Minha trajetória reflete essa resiliência técnica: desenvolvi desde plataformas SaaS utilizando <strong>JavaScript</strong> e <strong>React Native</strong> com bancos <strong>Supabase</strong> até modificar o *core* de motores de jogos em <strong>C++</strong> e Lua, além de construir automações com <strong>n8n</strong>.
             </p>
             <p className="text-zinc-400 leading-relaxed text-lg">
-              Possuo <strong>Inglês Fluente</strong> (tendo concluído o curso avançado no BRASAS aos 14 anos). Sempre muito aberto a novos aprendizados, meu grande objetivo agora é <strong>ingressar em um time de tecnologia</strong> onde eu possa aplicar e agregar valor com o que sei, e evoluir ainda mais ao lado de profissionais da área.
+              Possuo <strong>Inglês Fluente</strong> (tendo concluído o curso avançado no BRASAS aos 14 anos). Sempre muito aberto a novos aprendizados, meu grande objetivo agora é <strong>ingressar em um time de tecnologia</strong> onde eu possa aplicar e agregar valor com o que sei, e evoluir ainda área.
             </p>
           </div>
           
@@ -518,7 +528,7 @@ export default function App() {
                       
                       {/* Renderiza mídia se existir configurada para este índice */}
                       {selectedProject.mediaPlacement && selectedProject.mediaPlacement[idx] && (
-                        <div className="group relative">
+                        <div className="group relative w-fit mx-auto">
                           <video 
                             src={selectedProject.mediaPlacement[idx]}
                             autoPlay
@@ -534,7 +544,7 @@ export default function App() {
                                 video.webkitRequestFullscreen();
                               }
                             }}
-                            className="w-full rounded-xl border border-zinc-800 shadow-lg object-cover cursor-pointer group-hover:border-emerald-500/50 transition-colors"
+                            className="w-auto max-w-full max-h-[65vh] mx-auto rounded-xl border border-zinc-800 shadow-lg object-contain cursor-pointer group-hover:border-emerald-500/50 transition-colors"
                           />
                           <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none flex items-center gap-2 border border-white/10">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>

@@ -1,5 +1,5 @@
 import { motion, useAnimate, stagger, AnimatePresence } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaEnvelope, FaDownload } from 'react-icons/fa';
 import { useMemo, useRef, useState, useEffect } from 'react';
 import RibbonGlow from './RibbonGlow';
 import LiquidGlassButton from './LiquidGlassButton';
@@ -305,17 +305,25 @@ export default function App() {
           
           {/* Breve Resumo */}
           <motion.p variants={fadeUp} className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
-            Olá, eu sou o Henrique Cucco Nunes. Desenvolvedor com sólida base prática em arquitetura de banco de dados, sistemas complexos, e criação de interfaces modernas e interativas para plataformas web, mobile e desktop.
+            Olá, eu sou o <span className="text-white font-bold">Henrique Cucco Nunes</span>. Desenvolvedor Full-Stack com foco em criação de interfaces modernas para plataformas web, mobile e desktop, engenharia de sistemas complexos e arquitetura de bancos de dados robustos.
           </motion.p>
           
           {/* Call to Actions (Bot├Áes) e Redes */}
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <a 
-              href="#projetos" 
-              className="px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-zinc-200 transition-colors"
-            >
-              Ver meus projetos
-            </a>
+                href="#projetos" 
+                className="px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-zinc-200 transition-colors"
+              >
+                Ver meus projetos
+              </a>
+              <a 
+                href="/Henrique_Cucco_CV.pdf" 
+                download="Henrique_Cucco_CV.pdf"
+                className="flex items-center gap-2 px-8 py-4 bg-zinc-900 border border-zinc-800 text-white font-semibold rounded-full hover:bg-zinc-800 hover:border-zinc-700 transition-colors"
+              >
+                <FaDownload />
+                Currículo
+              </a>
             
             <div className="flex items-center gap-4 px-6 py-4 rounded-full bg-zinc-900 border border-zinc-800">
               <a href="https://github.com/HenriqueCN06" target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-white transition-colors">
@@ -413,7 +421,7 @@ export default function App() {
           <div className="flex-1 w-full">
             <h4 className="text-emerald-400 font-semibold mb-6 uppercase tracking-widest text-sm">Principais Skills & Tecnologias</h4>
             <div className="flex flex-wrap gap-3">
-              {['JavaScript', 'React Native', 'React.js', 'Node.js', 'C++', 'Lua', 'Python', 'PostgreSQL', 'Supabase', 'Electron', 'Git & GitHub', 'Tailwind CSS', 'n8n', 'Inglês Fluente'].map((tech) => (
+              {['JavaScript', 'React.js', 'React Native', 'Zustand', 'Node.js', 'RESTful APIs', 'Python', 'C / C++', 'Java', 'Lua', 'OpenGL', 'Redes & Protocolos', 'PostgreSQL', 'Supabase', 'Segurança da Informação', 'ETL (Pipelines)', 'AWS', 'Linux', 'Electron', 'n8n', 'Git & GitHub', 'Tailwind CSS', 'Inglês Fluente'].map((tech) => (
                 <motion.span 
                   whileHover={{ scale: 1.05 }}
                   key={tech} 
@@ -467,6 +475,14 @@ export default function App() {
               >
                 <FaGithub size={20} />
                 GitHub
+              </a>
+              <a 
+                href="/Henrique_Cucco_CV.pdf" 
+                download="Henrique_Cucco_CV.pdf"
+                className="flex items-center justify-center gap-3 px-8 py-4 bg-zinc-900 border border-zinc-700 text-white font-bold rounded-xl hover:bg-zinc-800 transition-colors"
+              >
+                <FaDownload size={20} className="text-emerald-400" />
+                Currículo
               </a>
             </div>
             

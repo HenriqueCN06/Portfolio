@@ -3,6 +3,7 @@ import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 import { useMemo, useRef, useState, useEffect } from 'react';
 import RibbonGlow from './RibbonGlow';
 import LiquidGlassButton from './LiquidGlassButton';
+import VariableFontCursorProximity from './VariableFontCursorProximity';
 
 // --- Banco de Dados dos Projetos ---
 const PROJECTS_DATA = [
@@ -299,7 +300,7 @@ export default function App() {
           {/* Título Principal */}
           <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl font-bold mb-8 tracking-tight text-white leading-tight">
             Criando <VariableFontHoverByLetter label="interfaces modernas" className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500" /> <br className="hidden md:block" />
-            e soluções de software escaláveis.
+            e soluções de software <VariableFontCursorProximity label="escaláveis." className="text-emerald-400" />
           </motion.h1>
           
           {/* Breve Resumo */}
@@ -412,7 +413,7 @@ export default function App() {
           <div className="flex-1 w-full">
             <h4 className="text-emerald-400 font-semibold mb-6 uppercase tracking-widest text-sm">Principais Skills & Tecnologias</h4>
             <div className="flex flex-wrap gap-3">
-              {['JavaScript', 'React Native', 'React.js', 'C++', 'Lua', 'PostgreSQL', 'Supabase', 'Node.js', 'Electron', 'Python', 'Tailwind CSS', 'n8n', 'Inglês Fluente'].map((tech) => (
+              {['JavaScript', 'React Native', 'React.js', 'Node.js', 'C++', 'Lua', 'Python', 'PostgreSQL', 'Supabase', 'Electron', 'Git & GitHub', 'Tailwind CSS', 'n8n', 'Inglês Fluente'].map((tech) => (
                 <motion.span 
                   whileHover={{ scale: 1.05 }}
                   key={tech} 
